@@ -1,0 +1,89 @@
+﻿J001：用 MinGW 編譯 Ratfor
+
+1. 下載原始碼：
+   #
+   # C Ratfor is a ratfor preprocessor written in C.
+   #
+   https://github.com/slattarini/ratfor    # ratfor-master.zip
+
+2. 下載測試碼：
+   #
+   # Sieve.r
+   # 
+   https://rosettacode.org/wiki/Sieve_of_Eratosthenes#RATFOR
+
+3. 編寫補釘碼：
+   //
+   // config.h
+   //
+
+   #define PACKAGE_STRING "C Ratfor"
+
+   #define S_IRUSR 0400
+   #define S_IWUSR 0200
+
+   #define S_IRGRP 040
+   #define S_IWGRP 020
+
+   #define S_IROTH 04
+   #define S_IWOTH 02
+
+4. 編寫編譯碼：
+   ::
+   :: mk-exe.bat
+   ::
+   if exist ratfor.exe del ratfor.exe
+   if exist a.exe del a.exe
+   if exist a.log del a.log   
+
+   gcc -I. codegen.c define.c error.c include.c init.c io.c labgen.c main.c parser.c rat4-hash.c tokenizer.c xopen.c > a.log 2>&1
+
+   if exist a.exe ren a.exe ratfor.exe
+
+5. 抽取 ratfor-master.zip\src\ 至工作目錄，例如：R:\src\  (RAMDRIVE)
+
+6. 將 Sieve.r, config.h, mk-exe.bat 三檔案加入 R:\src\
+
+7. 在 R:\src\ 開啟 Console Cmd (命令提示字元)，執行 mk-exe.bat 開始編譯，產生 ratfor.exe
+
+8. 測試：
+
+   R:\src>ratfor.exe -o Sieve.f Sieve.r
+
+   R:\src>g77 -o Sieve.exe Sieve.f
+
+   R:\src>Sieve.exe
+
+   There are          168 primes.
+        2     3     5     7    11    13    17    19    23    29
+       31    37    41    43    47    53    59    61    67    71
+       73    79    83    89    97   101   103   107   109   113
+      127   131   137   139   149   151   157   163   167   173
+      179   181   191   193   197   199   211   223   227   229
+      233   239   241   251   257   263   269   271   277   281
+      283   293   307   311   313   317   331   337   347   349
+      353   359   367   373   379   383   389   397   401   409
+      419   421   431   433   439   443   449   457   461   463
+      467   479   487   491   499   503   509   521   523   541
+      547   557   563   569   571   577   587   593   599   601
+      607   613   617   619   631   641   643   647   653   659
+      661   673   677   683   691   701   709   719   727   733
+      739   743   751   757   761   769   773   787   797   809
+      811   821   823   827   829   839   853   857   859   863
+      877   881   883   887   907   911   919   929   937   941
+      947   953   967   971   977   983   991   997
+
+   R:\src>
+
+9. 編譯環境：gcc 3.4.5 (2004) (mingw-vista special r3)
+
+附註1：不用 gcc -o ratfor.exe 改用 ren a.exe ratfor.exe 是因為参數列太長。
+
+附註2：gcc -I. 是因為原始碼使用： #include <config.h> 是角括弧而非雙引號。
+
+附註3：不用 configure; make 而用 DOS.bat 是因為不想進入 MSYS 且 autoconfig 沒甚麼內容，乾脆自己製造 config.h 也解決檔案權限問題。還有也不用 make clean。
+
+附註4：沒有入錯板，我的領域是 Program Language 的實作。Ratfor 是我 Review 之旅的首步。
+
+
+
